@@ -11,8 +11,11 @@ import Skeleton from "@/components/Skeleton";
 import { useUser } from "@/hooks/useUser";
 import Auth from "@/components/Auth";
 import UserBar from "@/components/UserBar";
+ import { Analytics } from "@vercel/analytics/react";
+
 
 export default function Home() {
+  
    const user = useUser();
 
   if (!user) {
@@ -70,6 +73,10 @@ return (
     </div>
 
   </main>
+ 
+
+
+  <Analytics />
   </div>
 );
 }
