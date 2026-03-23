@@ -29,35 +29,55 @@ export default function MotivationButton({ stats }: any) {
     }
   };
 
-  return (
-    <div className="bg-white rounded-2xl shadow-md hover:shadow-lg transition duration-200 p-5">
-      {/* Heading */}
-      <h2 className="font-semibold text-lg text-gray-900 mb-3">
-        AI Motivation
-      </h2>
+ return (
+  <div className="bg-white rounded-2xl shadow-md hover:shadow-xl transition duration-300 p-5 border border-gray-100 max-h-[260px] flex flex-col">
+    
+    {/* HEADER */}
+    <div className="flex items-center gap-3 mb-3">
+      <div className="w-9 h-9 flex items-center justify-center bg-black text-white rounded-full text-sm">
+        ⚡
+      </div>
+      <div>
+        <h2 className="text-md font-semibold text-gray-900">
+          AI Motivation
+        </h2>
+        <p className="text-xs text-gray-500">
+          Smart fitness insights
+        </p>
+      </div>
+    </div>
 
-      {/* Button */}
-     <button
+    {/* BUTTON */}
+   <button
   onClick={getMotivation}
   disabled={loading}
-  className={`px-4 py-2 rounded text-white transition active:scale-95
+  className={`w-full py-2.5 rounded-lg font-medium text-white 
+  flex items-center justify-center gap-2
+  transition duration-200 active:scale-95 shadow-sm
   ${
     loading
       ? "bg-gray-400 cursor-not-allowed"
-      : "bg-black hover:opacity-90"
+      : "bg-gradient-to-r from-black to-gray-800 hover:opacity-90"
   }`}
 >
-  {loading ? "Generating..." : "Get Motivation"}
+  {loading ? (
+    <>
+      <span className="animate-spin">⏳</span>
+      Generating...
+    </>
+  ) : (
+    <>
+      ⚡ Get Motivation
+    </>
+  )}
 </button>
 
-      {/* Message */}
-      {msg && (
-  <div className="mt-4 p-3 bg-gray-100 rounded-lg">
-    <p className="text-gray-800 text-sm leading-relaxed">
-      {msg}
-    </p>
+    {/* MESSAGE (SCROLLABLE) */}
+    {msg && !loading && (
+      <div className="mt-3 p-3 bg-gray-50 rounded-lg text-gray-800 text-sm leading-relaxed border max-h-[120px] overflow-y-auto">
+  {msg}
+</div>
+    )}
   </div>
-)}
-    </div>
-  );
+);
 }

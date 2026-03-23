@@ -11,21 +11,23 @@ export default function StatsCards({ stats }: any) {
   ];
 
   return (
-    <div className="bg-white rounded-2xl shadow-md hover:shadow-lg transition duration-200 p-4 text-center">
+    <>
       {items.map((item, i) => (
-       <div
-  key={i}
-  className="bg-white rounded-2xl shadow-md p-4 text-center 
-             hover:scale-105 transition duration-200"
->
-<p className="text-sm text-gray-600 font-medium">
-  {item.label}
-</p>
-<p className="text-2xl font-bold text-gray-900">
-  {item.value}
-</p>
+        <div
+          key={i}
+          className="bg-white rounded-2xl shadow p-4 text-center 
+                     hover:shadow-lg hover:-translate-y-1 
+                     transition duration-200"
+        >
+          <p className="text-gray-500 text-sm font-medium">
+            {item.label}
+          </p>
+
+          <h2 className="text-2xl font-bold text-gray-900 mt-1">
+            {item.value}
+          </h2>
         </div>
       ))}
-    </div>
+    </>
   );
 }

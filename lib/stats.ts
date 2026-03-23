@@ -1,15 +1,48 @@
 export function calculateStats(workouts: any[]) {
-  if (!workouts || workouts.length === 0) return null;
+  if (!workouts.length) {
+    return {
+      streak: 0,
+      weeklyCount: 0,
+      totalMinutes: 0,
+      mostFrequent: "None",
+      lastWorkoutDate: null,
+    };
+  }
 
-  // 🔹 Total Minutes
+  const dates = workouts.map(w => w.date).sort().reverse();
+
+  // 🔥 Streak logic (unique days)
+  const uniqueDates = [...new Set(dates)];
+  let streak = 1;
+
+  for (let i = 1; i < uniqueDates.length; i++) {
+    const prev = new Date(uniqueDates[i - 1]);
+    const curr = new Date(uniqueDates[i]);
+
+    const diff = (prev.getTime() - curr.getTime()) / (1000 * 60 * 60 * 24);
+
+    if (diff === 1) streak++;
+    else break;
+  }
+
+  // 📅 Weekly count
+  const now = new Date();
+  const weekAgo = new Date();
+  weekAgo.setDate(now.getDate() - 7);
+
+  const weeklyCount = workouts.filter(
+    w => new Date(w.date) >= weekAgo
+  ).length;
+
+  // ⏱ Total minutes
   const totalMinutes = workouts.reduce(
-    (sum, w) => sum + w.duration,
+    (sum, w) => sum + (w.duration || 0),
     0
   );
 
-  // 🔹 Most Frequent Activity
-  const freq: Record<string, number> = {};
-  workouts.forEach((w) => {
+  // 🏃 Most frequent
+  const freq: any = {};
+  workouts.forEach(w => {
     freq[w.activity_type] = (freq[w.activity_type] || 0) + 1;
   });
 
@@ -17,48 +50,11 @@ export function calculateStats(workouts: any[]) {
     freq[a] > freq[b] ? a : b
   );
 
-  // 🔹 Weekly Count (Mon–Sun)
-  const today = new Date();
-  const firstDay = new Date(today);
-  firstDay.setDate(today.getDate() - today.getDay());
-
-  const weeklyCount = workouts.filter((w) => {
-    const d = new Date(w.date);
-    return d >= firstDay;
-  }).length;
-
-  // 🔥 🔥 🔥 CORRECT STREAK LOGIC 🔥 🔥 🔥
-
-  // Step 1: Get unique dates
-  const uniqueDates = [
-    ...new Set(workouts.map((w) => w.date)),
-  ];
-
-  // Step 2: Convert to Date objects & sort descending
-  const sortedDates = uniqueDates
-    .map((d) => new Date(d))
-    .sort((a, b) => b.getTime() - a.getTime());
-
-  let streak = 0;
-  let current = new Date();
-
-  for (let date of sortedDates) {
-    const diff =
-      (current.getTime() - date.getTime()) /
-      (1000 * 60 * 60 * 24);
-
-    if (diff <= 1) {
-      streak++;
-      current = date;
-    } else {
-      break;
-    }
-  }
-
   return {
+    streak,
+    weeklyCount,
     totalMinutes,
     mostFrequent,
-    weeklyCount,
-    streak,
+    lastWorkoutDate: dates[0],
   };
 }

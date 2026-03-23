@@ -23,53 +23,78 @@ export default function WorkoutForm({ onAdd }: any) {
   };
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="bg-white rounded-2xl shadow-md hover:shadow-lg transition duration-200 p-5 space-y-4">    
-      {/* 🔥 FIXED HEADING */}
-      <h2 className="font-semibold text-lg text-gray-900">
-        Add Workout
-      </h2>
+  <form
+  onSubmit={handleSubmit}
+  className="bg-white rounded-2xl shadow-md hover:shadow-xl transition duration-300 p-6 space-y-5 border border-gray-100"
+>
+  {/* 🔥 HEADER */}
+  <div>
+    <h2 className="text-xl font-semibold text-gray-900">
+      Add Workout
+    </h2>
+    <p className="text-sm text-gray-500">
+      Track your daily fitness activity
+    </p>
+  </div>
 
-      {/* 🔥 SELECT */}
-      <select
-        className="w-full border border-gray-300 p-2 rounded text-gray-900 bg-white"
-        onChange={(e) =>
-          setForm({ ...form, activity_type: e.target.value })
-        }
-      >
-        <option>Running</option>
-        <option>Yoga</option>
-        <option>Boxing</option>
-        <option>Cycling</option>
-      </select>
+  {/* 🔥 ACTIVITY TYPE */}
+  <div className="space-y-1">
+    <label className="text-sm font-medium text-gray-700">
+      Activity Type
+    </label>
+    <select
+      className="w-full border border-gray-300 p-2.5 rounded-lg text-gray-900 bg-white 
+      focus:outline-none focus:ring-2 focus:ring-black focus:border-black transition"
+      onChange={(e) =>
+        setForm({ ...form, activity_type: e.target.value })
+      }
+    >
+      <option>Running</option>
+      <option>Yoga</option>
+      <option>Boxing</option>
+      <option>Cycling</option>
+    </select>
+  </div>
 
-      {/* 🔥 INPUT */}
-      <input
-        type="number"
-        placeholder="Duration (mins)"
-       className="w-full border border-gray-300 p-2 rounded text-gray-900 
-focus:outline-none focus:ring-2 focus:ring-black"
-        onChange={(e) =>
-          setForm({ ...form, duration: e.target.value })
-        }
-      />
+  {/* 🔥 DURATION */}
+  <div className="space-y-1">
+    <label className="text-sm font-medium text-gray-700">
+      Duration (minutes)
+    </label>
+    <input
+      type="number"
+      placeholder="e.g. 30"
+      className="w-full border border-gray-300 p-2.5 rounded-lg text-gray-900 placeholder-gray-400
+      focus:outline-none focus:ring-2 focus:ring-black focus:border-black transition"
+      onChange={(e) =>
+        setForm({ ...form, duration: e.target.value })
+      }
+    />
+  </div>
 
-      {/* 🔥 DATE */}
-      <input
-        type="date"
-        value={form.date}
-        className="w-full border border-gray-300 p-2 rounded text-gray-900 
-focus:outline-none focus:ring-2 focus:ring-black"
-        onChange={(e) =>
-          setForm({ ...form, date: e.target.value })
-        }
-      />
+  {/* 🔥 DATE */}
+  <div className="space-y-1">
+    <label className="text-sm font-medium text-gray-700">
+      Date
+    </label>
+    <input
+      type="date"
+      value={form.date}
+      className="w-full border border-gray-300 p-2.5 rounded-lg text-gray-900 
+      focus:outline-none focus:ring-2 focus:ring-black focus:border-black transition"
+      onChange={(e) =>
+        setForm({ ...form, date: e.target.value })
+      }
+    />
+  </div>
 
-      {/* 🔥 BUTTON */}
-      <button className="w-full bg-black text-white py-2 rounded hover:opacity-90 active:scale-95 transition">
-        Add Workout
-      </button>
-    </form>
+  {/* 🔥 BUTTON */}
+  <button
+    className="w-full bg-black text-white py-2.5 rounded-lg font-medium 
+    hover:opacity-90 active:scale-95 transition duration-200 shadow-sm"
+  >
+    Add Workout
+  </button>
+</form>
   );
 }

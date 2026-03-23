@@ -1,31 +1,22 @@
 export async function POST(req: Request) {
   const stats = await req.json();
 
-  const { streak, weeklyCount, totalMinutes, mostFrequent } = stats;
+  const templates = [
+    `You're currently on a ${stats.streak}-day streak 🔥 — that’s not luck, that’s discipline. Most people quit early, but you’re showing consistency. If you keep showing up like this, results are guaranteed. Stay focused and don’t break the chain.`,
 
-  let message = "";
+    `This week you've completed ${stats.weeklyCount} workouts. That’s strong progress. Imagine where you'll be in a month if you maintain this pace. Small efforts done daily lead to massive transformation over time.`,
 
-  // 🔥 Smart personalized logic
+    `You've already invested ${stats.totalMinutes} minutes into your fitness. That’s time most people never commit. Every minute is building a stronger, better version of you. Keep stacking those minutes.`,
 
-  if (streak >= 5) {
-    message = `🔥 Amazing! You're on a ${streak}-day streak. Keep pushing and consider adding a recovery day to avoid burnout.`;
-  } else if (streak >= 3) {
-    message = `💪 Great job! A ${streak}-day streak is building momentum. Stay consistent!`;
-  } else {
-    message = `🚀 Let's build your streak! Start with small daily workouts.`;
-  }
+    `${stats.mostFrequent} seems to be your go-to activity. That’s great — consistency builds mastery. But don’t be afraid to challenge yourself and add variety to push your limits further.`,
 
-  if (weeklyCount >= 5) {
-    message += ` You're highly active this week (${weeklyCount} sessions). Keep it balanced.`;
-  } else {
-    message += ` Try reaching 5 workouts this week—you’re at ${weeklyCount}.`;
-  }
+    `You’re doing better than you think. Progress isn’t always visible immediately, but every workout is shaping your discipline, mindset, and strength. Stay patient — results are coming.`
+  ];
 
-  message += ` Total minutes: ${totalMinutes}.`;
+  const random =
+    templates[Math.floor(Math.random() * templates.length)];
 
-  if (mostFrequent) {
-    message += ` You enjoy ${mostFrequent}—consider diversifying for better fitness.`;
-  }
-
-  return Response.json({ message });
+  return Response.json({
+    message: random,
+  });
 }
