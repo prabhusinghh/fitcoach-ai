@@ -2,7 +2,7 @@
 
 export default function WorkoutList({ workouts }: any) {
   return (
-    <div className="bg-white rounded-2xl shadow-md hover:shadow-xl transition duration-300 p-6 border border-gray-100">
+    <div className="glass rounded-2xl shadow-md p-6 border border-white/30 backdrop-blur-md">
       
       {/* 🔥 HEADER */}
       <div className="mb-4">
@@ -27,8 +27,8 @@ export default function WorkoutList({ workouts }: any) {
           {workouts.map((w: any) => (
             <div
               key={w.id}
-              className="flex justify-between items-center bg-gray-50 px-4 py-3 rounded-xl 
-              hover:bg-gray-100 transition duration-200"
+              className="flex justify-between items-center bg-white/70 px-4 py-3 rounded-xl 
+hover:bg-white transition duration-200"
             >
               {/* 🔥 LEFT: Activity */}
               <div className="flex flex-col">

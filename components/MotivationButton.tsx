@@ -30,7 +30,8 @@ export default function MotivationButton({ stats }: any) {
   };
 
  return (
-  <div className="bg-white rounded-2xl shadow-md hover:shadow-xl transition duration-300 p-5 border border-gray-100 max-h-[260px] flex flex-col">
+  <div className="glass rounded-2xl shadow-lg p-5 border border-white/30 
+max-h-[260px] flex flex-col backdrop-blur-md">
     
     {/* HEADER */}
     <div className="flex items-center gap-3 mb-3">
@@ -51,14 +52,14 @@ export default function MotivationButton({ stats }: any) {
    <button
   onClick={getMotivation}
   disabled={loading}
-  className={`w-full py-2.5 rounded-lg font-medium text-white 
-  flex items-center justify-center gap-2
-  transition duration-200 active:scale-95 shadow-sm
-  ${
-    loading
-      ? "bg-gray-400 cursor-not-allowed"
-      : "bg-gradient-to-r from-black to-gray-800 hover:opacity-90"
-  }`}
+ className={`w-full py-2.5 rounded-lg font-medium text-white 
+flex items-center justify-center gap-2
+transition duration-200 active:scale-95
+${
+  loading
+    ? "bg-gray-400"
+    : "bg-gradient-to-r from-black via-gray-800 to-black shadow-md hover:shadow-xl"
+}`}
 >
   {loading ? (
     <>

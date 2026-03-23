@@ -25,23 +25,27 @@ export default function WorkoutForm({ onAdd }: any) {
   return (
   <form
   onSubmit={handleSubmit}
-  className="bg-white rounded-2xl shadow-md hover:shadow-xl transition duration-300 p-6 space-y-5 border border-gray-100"
+  className="glass rounded-2xl shadow-lg p-6 border border-white/30 backdrop-blur-md h-[420px] flex flex-col justify-between"
 >
   {/* 🔥 HEADER */}
   <div>
-    <h2 className="text-xl font-semibold text-gray-900">
-      Add Workout
-    </h2>
-    <p className="text-sm text-gray-500">
-      Track your daily fitness activity
-    </p>
-  </div>
+  {/* 🔥 TITLE */}
+  <h2 className="text-lg font-semibold text-gray-900">
+    Add Workout
+  </h2>
 
-  {/* 🔥 ACTIVITY TYPE */}
-  <div className="space-y-1">
-    <label className="text-sm font-medium text-gray-700">
-      Activity Type
-    </label>
+  {/* 🔥 SUBTITLE */}
+  <p className="text-sm text-gray-500 mt-1">
+    Track your daily fitness activity
+  </p>
+</div>
+
+{/* 🔥 ACTIVITY TYPE */}
+<div className="space-y-1">
+  <label className="text-sm font-medium text-gray-700">
+    Activity Type
+  </label>
+
     <select
       className="w-full border border-gray-300 p-2.5 rounded-lg text-gray-900 bg-white 
       focus:outline-none focus:ring-2 focus:ring-black focus:border-black transition"

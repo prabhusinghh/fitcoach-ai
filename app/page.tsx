@@ -13,7 +13,7 @@ export default function Home() {
   const stats = calculateStats(workouts);
 
 return (
-  <main className="min-h-screen bg-gray-100 px-4 md:px-8 py-6">
+  <main className="min-h-screen bg-gradient-to-br from-gray-100 via-gray-200 to-gray-300 px-4 md:px-8 py-6">
     
     {/* 🔥 HEADER */}
     <div className="flex items-center justify-center gap-3 mb-8">

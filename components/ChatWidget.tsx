@@ -64,13 +64,14 @@ export default function ChatWidget({ stats }: any) {
   };
 
   return (
-    <div className="bg-white rounded-2xl shadow-md hover:shadow-xl transition duration-300 flex flex-col h-[420px] border border-gray-100">
+    <div className="glass rounded-2xl shadow-lg flex flex-col h-[420px] border border-white/30 backdrop-blur-md">
       
       {/* 🔥 HEADER WITH BOT */}
       <div className="flex items-center gap-3 p-4 border-b">
-        <div className="w-10 h-10 flex items-center justify-center bg-black text-white rounded-full text-lg">
-          🤖
-        </div>
+       <div className="w-10 h-10 flex items-center justify-center 
+bg-gradient-to-br from-black to-gray-700 text-white rounded-full">
+  🤖
+</div>
         <div>
           <h2 className="text-md font-semibold text-gray-900">
             AI Fitness Coach
