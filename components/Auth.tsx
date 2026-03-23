@@ -12,7 +12,12 @@ export default function Auth() {
 
     setLoading(true);
 
-    await supabase.auth.signInWithOtp({ email });
+   await supabase.auth.signInWithOtp({
+  email,
+  options: {
+    emailRedirectTo: "https://fitcoach-ai-bot.vercel.app",
+  },
+});
 
     setLoading(false);
     alert("Check your email for login link 📩");
