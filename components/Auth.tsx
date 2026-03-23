@@ -15,7 +15,7 @@ export default function Auth() {
    await supabase.auth.signInWithOtp({
   email,
   options: {
-    emailRedirectTo: "https://fitcoach-ai-bot.vercel.app",
+    emailRedirectTo: "https://fitcoach-ai-bot.vercel.app/",
   },
 });
 
