@@ -22,7 +22,7 @@ export function useWorkouts() {
       const res = await fetch("/api/workouts");
       const data = await res.json();
 
-      setWorkouts(data);
+      setWorkouts(data || []);
       localStorage.setItem("workouts", JSON.stringify(data));
 
     } catch (err) {
