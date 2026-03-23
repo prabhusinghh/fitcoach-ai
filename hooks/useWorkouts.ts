@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { Workout } from "@/types";
+import { supabase } from "@/lib/supabaseClient"; // ✅ correct import
 
 export function useWorkouts() {
   const [workouts, setWorkouts] = useState<Workout[]>([]);
@@ -13,7 +14,6 @@ export function useWorkouts() {
     try {
       setLoading(true);
 
-      // 🔥 Try cache first
       const cached = localStorage.getItem("workouts");
       if (cached) {
         setWorkouts(JSON.parse(cached));
@@ -23,8 +23,6 @@ export function useWorkouts() {
       const data = await res.json();
 
       setWorkouts(data);
-
-      // 🔥 Save to cache
       localStorage.setItem("workouts", JSON.stringify(data));
 
     } catch (err) {
@@ -38,10 +36,14 @@ export function useWorkouts() {
   // 🟢 ADD WORKOUT (OPTIMISTIC UPDATE)
   const addWorkout = async (workout: Workout) => {
     try {
-      // 🔥 Instant UI update
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+
       const tempWorkout = {
         ...workout,
         id: `temp-${Date.now()}`,
+        user_id: user?.id,
       };
 
       setWorkouts((prev) => [tempWorkout, ...prev]);
@@ -51,14 +53,18 @@ export function useWorkouts() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(workout),
+        body: JSON.stringify({
+          ...workout,
+          user_id: user?.id,
+        }),
       });
 
       const savedWorkout = await res.json();
 
-      // 🔥 Replace temp with real data
       setWorkouts((prev) =>
-        prev.map((w) => (w.id === tempWorkout.id ? savedWorkout : w))
+        prev.map((w) =>
+          w.id === tempWorkout.id ? savedWorkout : w
+        )
       );
 
     } catch (err) {
@@ -67,7 +73,6 @@ export function useWorkouts() {
     }
   };
 
-  // 🟢 INITIAL LOAD
   useEffect(() => {
     fetchWorkouts();
   }, []);
