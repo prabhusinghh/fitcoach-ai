@@ -1,5 +1,5 @@
 export function calculateStats(workouts: any[]) {
-  if (!workouts.length) {
+  if (!workouts || workouts.length === 0){
     return {
       streak: 0,
       weeklyCount: 0,

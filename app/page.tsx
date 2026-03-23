@@ -7,12 +7,22 @@ import MotivationButton from "@/components/MotivationButton";
 import ChatWidget from "@/components/ChatWidget";
 import { useWorkouts } from "@/hooks/useWorkouts";
 import { calculateStats } from "@/lib/stats";
+import Skeleton from "@/components/Skeleton";
 
 export default function Home() {
-  const { workouts, addWorkout } = useWorkouts();
-  const stats = calculateStats(workouts);
-
+  const { workouts, addWorkout, loading, error } = useWorkouts();
+  const stats = calculateStats(workouts || []);
+  
+  if (error) {
+  return (
+    <main className="min-h-screen flex items-center justify-center">
+      <p className="text-red-500">{error}</p>
+    </main>
+  );
+}
+if (loading) return <Skeleton />;
 return (
+  <div className="animate-fadeIn">
   <main className="min-h-screen bg-gradient-to-br from-gray-100 via-gray-200 to-gray-300 px-4 md:px-8 py-6">
     
     {/* 🔥 HEADER */}
@@ -49,5 +59,6 @@ return (
     </div>
 
   </main>
+  </div>
 );
 }

@@ -84,6 +84,7 @@ export default function WorkoutForm({ onAdd }: any) {
     <input
       type="date"
       value={form.date}
+      max={new Date().toISOString().split("T")[0]}
       className="w-full border border-gray-300 p-2.5 rounded-lg text-gray-900 
       focus:outline-none focus:ring-2 focus:ring-black focus:border-black transition"
       onChange={(e) =>
