@@ -8,7 +8,9 @@ export default function Auth() {
   const [loading, setLoading] = useState(false);
 
   const handleLogin = async () => {
-    if (!email) return;
+    if (!email || loading) return;
+try{
+
 
     setLoading(true);
 
@@ -18,9 +20,14 @@ export default function Auth() {
     emailRedirectTo: "https://fitcoach-ai-bot.vercel.app/",
   },
 });
-
+  alert("Check your email for login link 📩");
+} catch (error) {
+  console.error("Login error:", error);
+  alert("Too many requests. Please try again later.");
+} finally {
     setLoading(false);
     alert("Check your email for login link 📩");
+  }
   };
 
   return (
