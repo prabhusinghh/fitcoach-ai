@@ -4,15 +4,18 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabaseClient";
 
 export function useUser() {
-  const [user, setUser] = useState<any>(null);
+  const [user, setUser] = useState<any>(undefined); // ✅ changed
 
   useEffect(() => {
-    // 🔥 get current session
-    supabase.auth.getUser().then(({ data }) => {
-      setUser(data.user);
-    });
+    // 🔥 use session instead of user
+    const getSession = async () => {
+      const { data } = await supabase.auth.getSession();
+      setUser(data.session?.user ?? null);
+    };
 
-    // 🔥 listen to auth changes (login/logout)
+    getSession();
+
+    // 🔥 listen to auth changes
     const { data: listener } = supabase.auth.onAuthStateChange(
       (_, session) => {
         setUser(session?.user || null);

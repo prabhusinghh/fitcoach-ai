@@ -18,6 +18,7 @@ import UserBar from "@/components/UserBar";
 export default function Home() {
   
   const user = useUser();
+ 
    useEffect(() => {
     if (window.location.hash) {
       window.history.replaceState(null, "", window.location.pathname);
@@ -26,6 +27,9 @@ export default function Home() {
   // 🔥 MOVE THIS ABOVE CONDITION (IMPORTANT)
   const { workouts, addWorkout, loading, error } = useWorkouts();
   const stats = calculateStats(workouts || []);
+   if (user === undefined) {
+  return <Skeleton />; // or loading screen
+}
 
   return (
     <>
