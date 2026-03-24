@@ -9,7 +9,7 @@ import { useWorkouts } from "@/hooks/useWorkouts";
 import { calculateStats } from "@/lib/stats";
 import Skeleton from "@/components/Skeleton";
 import { useUser } from "@/hooks/useUser";
-import { useEffect } from "react";
+
 import Auth from "@/components/Auth";
 import UserBar from "@/components/UserBar";
  import { Analytics } from "@vercel/analytics/react";
@@ -19,11 +19,7 @@ export default function Home() {
   
   const user = useUser();
  
-   useEffect(() => {
-    if (window.location.hash) {
-      window.history.replaceState(null, "", window.location.pathname);
-    }
-  }, []);
+   
   // 🔥 MOVE THIS ABOVE CONDITION (IMPORTANT)
   const { workouts, addWorkout, loading, error } = useWorkouts();
   const stats = calculateStats(workouts || []);
