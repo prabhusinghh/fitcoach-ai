@@ -1,6 +1,10 @@
 "use client";
 
 export default function WorkoutList({ workouts }: any) {
+  const safeWorkouts = (workouts || []).filter(
+    (w: any) => w && w.date
+  ); // ✅ FIX
+
   return (
     <div className="glass rounded-2xl shadow-md p-6 border border-white/30 backdrop-blur-md">
       
@@ -15,7 +19,7 @@ export default function WorkoutList({ workouts }: any) {
       </div>
 
       {/* 🔥 EMPTY STATE */}
-      {workouts.length === 0 ? (
+      {safeWorkouts.length === 0 ? (
         <div className="text-center text-gray-500 py-8">
           No workouts yet 🚀 <br />
           <span className="text-sm">Start your fitness journey today!</span>
@@ -24,7 +28,7 @@ export default function WorkoutList({ workouts }: any) {
         /* 🔥 SCROLLABLE LIST */
         <div className="max-h-[320px] overflow-y-auto pr-2 space-y-2">
           
-          {workouts.map((w: any) => (
+          {safeWorkouts.map((w: any) => (
             <div
               key={w.id}
               className="flex justify-between items-center bg-white/70 px-4 py-3 rounded-xl 

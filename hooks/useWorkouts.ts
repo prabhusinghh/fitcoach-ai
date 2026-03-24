@@ -63,7 +63,7 @@ export function useWorkouts() {
 
       setWorkouts((prev) =>
         prev.map((w) =>
-          w.id === tempWorkout.id ? savedWorkout : w
+          w.id === tempWorkout.id && savedWorkout ? savedWorkout : w
         )
       );
 

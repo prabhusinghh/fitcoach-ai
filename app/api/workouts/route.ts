@@ -34,5 +34,5 @@ export async function POST(req: Request) {
 
   if (error) return Response.json({ error }, { status: 500 });
 
-  return Response.json(data);
+  return Response.json(data?.[0]);
 }
