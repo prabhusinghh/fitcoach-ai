@@ -74,7 +74,7 @@ bg-gradient-to-br from-black to-gray-700 text-white rounded-full">
 </div>
         <div>
           <h2 className="text-md font-semibold text-gray-900">
-            AI Fitness Coach
+           Yash aI
           </h2>
           <p className="text-xs text-gray-500">Always here to guide you</p>
         </div>

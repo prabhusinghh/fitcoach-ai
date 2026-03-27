@@ -41,7 +41,7 @@ try{
             💪
           </div>
           <h1 className="text-xl font-bold text-gray-900">
-            Yash AI
+            FitCoach AI
           </h1>
           <p className="text-sm text-gray-500">
             Your personal fitness assistant
