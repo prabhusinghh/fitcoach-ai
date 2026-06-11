@@ -7,7 +7,7 @@ type Message = {
   content: string;
 };
 
-export default function ChatWidget({ stats }: any) {
+export default function ChatWidget({ stats, workouts = [] }: any) {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
@@ -44,6 +44,7 @@ export default function ChatWidget({ stats }: any) {
         body: JSON.stringify({
           messages: newMessages,
           stats,
+          recentWorkouts: workouts.slice(0, 10),
         }),
       });
 

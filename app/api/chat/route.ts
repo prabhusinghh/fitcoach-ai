@@ -1,65 +1,63 @@
 export async function POST(req: Request) {
   try {
-    const { messages, stats, tone } = await req.json();
-    const lastMessage =
-      messages[messages.length - 1]?.content.toLowerCase();
-
-    // 🟢 🔥 HARD RULES (ADD HERE)
-    // if (lastMessage.includes("frequent")) {
-    //   return Response.json({
-    //     role: "assistant",
-    //     content: `Your most frequent activity is ${stats?.mostFrequent || "not available"} 🚴`,
-    //   });
-    // }
-
-    // if (lastMessage.includes("streak")) {
-    //   return Response.json({
-    //     role: "assistant",
-    //     content: `Your current streak is ${stats?.streak || 0} days 🔥`,
-    //   });
-    // }
+    const { messages, stats, recentWorkouts } = await req.json();
 
     const recentMessages = messages.slice(-5);
 
-   const systemPrompt = `
-You are a fitness coach AI.
+    // 🔥 Build recent workout history for context
+    let workoutHistory = "No workouts logged yet.";
+    if (recentWorkouts && recentWorkouts.length > 0) {
+      workoutHistory = recentWorkouts
+        .map(
+          (w: any) =>
+            `- ${w.activity_type}: ${w.duration} mins on ${w.date}`
+        )
+        .join("\n");
+    }
+
+    const systemPrompt = `
+You are a friendly, motivating fitness coach AI.
 
 IMPORTANT RULES:
-- ALWAYS use the user's provided stats
+- ALWAYS use the user's provided stats and workout history
 - NEVER guess or assume data
-- NEVER invent activities
+- NEVER invent activities the user hasn't done
 - If a value exists, use it directly
+- Reference specific workouts when relevant
 
-User stats:
+User Stats:
 - Streak: ${stats?.streak || 0} days
 - Weekly workouts: ${stats?.weeklyCount || 0}
 - Total minutes: ${stats?.totalMinutes || 0}
-- Most frequent activity: ${stats?.mostFrequent || "unknown"}
+- Most frequent activity: ${stats?.mostFrequent || "None"}
+
+Recent Workout History:
+${workoutHistory}
 
 Behavior:
-- Answer based ONLY on given stats
+- Answer based ONLY on given stats and workout history
 - Be concise (2–4 lines max)
-- Be accurate and confident
-
-Example:
-If user asks "what is my frequent exercise"
-→ Answer using "Most frequent activity"
+- Be accurate, motivating, and personal
+- Reference their actual activities and progress when answering
 `;
 
-    const res = await fetch("https://api.groq.com/openai/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${process.env.GROQ_API_KEY}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-  model: "llama-3.1-8b-instant", 
-  messages: [
-    { role: "system", content: systemPrompt },
-    ...recentMessages,
-  ],
-}),
-    });
+    const res = await fetch(
+      "https://api.groq.com/openai/v1/chat/completions",
+      {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${process.env.GROQ_API_KEY}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          model: "llama-3.1-8b-instant",
+          messages: [
+            { role: "system", content: systemPrompt },
+            ...recentMessages,
+          ],
+        }),
+      }
+    );
 
     const data = await res.json();
 
@@ -77,7 +75,6 @@ If user asks "what is my frequent exercise"
       role: "assistant",
       content: data.choices[0].message.content,
     });
-
   } catch (error) {
     console.error("GROQ ERROR:", error);
 

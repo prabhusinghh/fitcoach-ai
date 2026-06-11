@@ -44,7 +44,7 @@ export default function Home() {
             {/* 🔥 MAIN GRID */}
             <div className="grid md:grid-cols-2 gap-6 items-start mb-8">
               <WorkoutForm onAdd={addWorkout} />
-              <ChatWidget stats={stats} />
+              <ChatWidget stats={stats} workouts={workouts} />
             </div>
 
             {/* 🔥 WORKOUT LIST */}
