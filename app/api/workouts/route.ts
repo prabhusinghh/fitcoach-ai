@@ -1,25 +1,16 @@
 import { supabase } from "@/lib/supabaseClient";
 
-export async function GET(req: Request) {
-  const token = req.headers.get("authorization")?.replace("Bearer ", "");
+const GUEST_USER_ID = "guest";
 
-  if (!token) return Response.json([], { status: 200 }); // ✅ FIX
-
-  const {
-    data: { user },
-    error: userError,
-  } = await supabase.auth.getUser(token);
-
-  if (userError || !user) return Response.json([], { status: 200 }); // ✅ FIX
-
+export async function GET() {
   const { data, error } = await supabase
     .from("workouts")
     .select("*")
-    .eq("user_id", user.id)
+    .eq("user_id", GUEST_USER_ID)
     .order("date", { ascending: false });
 
   if (error) {
-    console.error(error);
+    console.error("Fetch workouts error:", error);
     return Response.json([], { status: 200 });
   }
 
@@ -29,33 +20,20 @@ export async function GET(req: Request) {
 export async function POST(req: Request) {
   const body = await req.json();
 
-  const token = req.headers.get("authorization")?.replace("Bearer ", "");
-
-  if (!token) {
-    return Response.json({ error: "Unauthorized" }, { status: 401 }); // ✅ FIX
-  }
-
-  const {
-    data: { user },
-    error: userError,
-  } = await supabase.auth.getUser(token);
-
-  if (userError || !user) {
-    return Response.json({ error: "Unauthorized" }, { status: 401 }); // ✅ FIX
-  }
-
   const { data, error } = await supabase
     .from("workouts")
     .insert([
       {
-        ...body,
-        user_id: user.id, // ✅ ensure always present
+        activity_type: body.activity_type,
+        duration: body.duration,
+        date: body.date,
+        user_id: GUEST_USER_ID,
       },
     ])
     .select();
 
   if (error) {
-    console.error("Insert error:", error); // 🔥 DEBUG
+    console.error("Insert error:", error);
     return Response.json({ error: "Insert failed" }, { status: 500 });
   }
 

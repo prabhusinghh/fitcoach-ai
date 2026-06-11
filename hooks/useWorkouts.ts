@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import { Workout } from "@/types";
-import { supabase } from "@/lib/supabaseClient";
 
 export function useWorkouts() {
   const [workouts, setWorkouts] = useState<Workout[]>([]);
@@ -14,30 +13,27 @@ export function useWorkouts() {
     try {
       setLoading(true);
 
-      // 🔥 get session token
-      const {
-        data: { session },
-      } = await supabase.auth.getSession();
-      const token = session?.access_token;
-
+      // Load from localStorage cache first
       const cached = localStorage.getItem("workouts");
       if (cached) {
         setWorkouts(JSON.parse(cached));
       }
 
-      const res = await fetch("/api/workouts", {
-        headers: {
-          Authorization: `Bearer ${token}`, // ✅ FIX
-        },
-      });
-
+      const res = await fetch("/api/workouts");
       const data = await res.json();
 
-      setWorkouts(data || []);
-      localStorage.setItem("workouts", JSON.stringify(data || []));
+      if (Array.isArray(data)) {
+        setWorkouts(data);
+        localStorage.setItem("workouts", JSON.stringify(data));
+      }
     } catch (err) {
       console.error(err);
-      setError("Failed to load workouts");
+      // Fall back to cached data if API fails
+      const cached = localStorage.getItem("workouts");
+      if (cached) {
+        setWorkouts(JSON.parse(cached));
+      }
+      setError("Failed to load workouts from server");
     } finally {
       setLoading(false);
     }
@@ -46,17 +42,9 @@ export function useWorkouts() {
   // 🟢 ADD WORKOUT (OPTIMISTIC UPDATE)
   const addWorkout = async (workout: Workout) => {
     try {
-      const {
-        data: { session },
-      } = await supabase.auth.getSession();
-
-      const token = session?.access_token;
-      const user = session?.user;
-
       const tempWorkout = {
         ...workout,
         id: `temp-${Date.now()}`,
-        user_id: user?.id,
       };
 
       // 🔥 Optimistic UI
@@ -66,12 +54,8 @@ export function useWorkouts() {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`, // ✅ FIX
         },
-        body: JSON.stringify({
-          ...workout,
-          user_id: user?.id,
-        }),
+        body: JSON.stringify(workout),
       });
 
       // 🔥 SAFE JSON PARSE (prevents crash)
@@ -94,13 +78,11 @@ export function useWorkouts() {
       );
 
       // 🔥 update cache
-      const updated = await fetch("/api/workouts", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const updated = await fetch("/api/workouts");
       const updatedData = await updated.json();
-      localStorage.setItem("workouts", JSON.stringify(updatedData || []));
+      if (Array.isArray(updatedData)) {
+        localStorage.setItem("workouts", JSON.stringify(updatedData));
+      }
     } catch (err) {
       console.error(err);
       setError("Failed to add workout");
